@@ -1,13 +1,90 @@
 %!TEX root = ../thesis.tex
 % ******************************* Thesis Appendix B ********************************
 
-\chapter{Installing the CUED class file}
+\chapter{Translation Lengths}
 
-\LaTeX.cls files can be accessed system-wide when they are placed in the
-<texmf>/tex/latex directory, where <texmf> is the root directory of the user’s \TeX installation. On systems that have a local texmf tree (<texmflocal>), which
-may be named ``texmf-local'' or ``localtexmf'', it may be advisable to install packages in <texmflocal>, rather than <texmf> as the contents of the former, unlike that of the latter, are preserved after the \LaTeX system is reinstalled and/or upgraded.
+Let $A \in \slc$, then the characteristic polynomial of $A$ is given by $$x^2- \tra(A)x+ I_2.$$ 
+Now, by Cayley-Hamilton theorem, we see that
+\begin{align*}
+	A^2 - \tra(A)A+ I_2&= 0 \\
+	\implies A + A^{-1}&= \tra(A) \cdot I
+\end{align*} 
+ Multiplying by $B$ on both sides, for any $B \in \slc$, we get the following identity:
+\[\tra(BA)+\tra(BA^{-1}) = \tra(A)\tra(B) \]
+Also, note that $\tra(A) = \tra(A^{-1})$, for all $A \in \slc$.
 
-It is recommended that the user create a subdirectory <texmf>/tex/latex/CUED for all CUED related \LaTeX class and package files. On some \LaTeX systems, the directory look-up tables will need to be refreshed after making additions or deletions to the system files. For \TeX Live systems this is accomplished via executing ``texhash'' as root. MIK\TeX users can run ``initexmf -u'' to accomplish the same thing.
+ 
+\begin{prop}
+	\label{prop:traceformula}
+	Let $A,B \in \slc$. Then,
+	$$\tra(ABA^{-1}B^{-1}) = \tra(A)^2+\tra(B)^2+\tra(AB)^2 - \tra(A) \tra(B) \tra(AB) -2$$
+\end{prop}
+\begin{proof}
+	From above identity, we get that
+	\begin{align*}
+		\tra(A^2)&= \tra(A)^2 - 2 \\
+		\tra(A^{-1}B)&= \tra(A^{-1})\tra(B) - \tra(A^{-1}B^{-1}) \\
+		\tra(ABA^{-1}B) &= \tra(AB) \tra(A^{-1}B) - \tra(A^2)\\
+		\tra(ABA^{-1}B^{-1}) &= \tra(ABA^{-1}) \tra(B^{-1}) - \tra(ABA^{-1}B)
+	\end{align*}
+	Using the fact that trace is invariant under conjugation and inversion in $\slc$, we get the formula for the trace of the commutator.
+\end{proof}
 
-Users not willing or able to install the files system-wide can install them in their personal directories, but will then have to provide the path (full or relative) in addition to the filename when referring to them in \LaTeX.
+Now, define for $H = \begin{bmatrix}
+	a & b \\
+	c & d \\ 
+\end{bmatrix} \in \pslr$, $$\norm{H}^2 \coloneqq a^2+b^2+c^2+d^2$$
+\begin{lem}
+	\label{lem:norm}
+	Let $H \in \pslr$ be a hyperbolic element then $\norm{H}^2 > 2$ and $\norm{H^n}_{n \in \mathbb{Z}}$ is unbounded.
+\end{lem}
+\begin{proof}
+	It is easy to note that \begin{equation}
+		\norm{H}^2 = (\tra{H})^2 + (b-c)^2 - 2.
+	\end{equation} 
+	Now, this implies that
+	\begin{align*}
+		\norm{H}^2 &> 4 + (b-c)^2 - 2 \\
+		&= (b-c)^2 + 2 \\
+		&\geq 2
+	\end{align*}
+As $H$ is a hyperbolic element, there exists $\lambda \in \mathbb{R}$ such that $|\lambda| > 1$ and $H$ is conjugate to 
+$\begin{bmatrix}
+	\lambda & 0 \\
+	0 & \frac{1}{ \lambda } \\ 
+\end{bmatrix}$. This implies that $\tra(H^n) = \lambda^n + \frac{1}{\lambda^n}$. Now, by (1), $\norm{H^n}_{n \in \mathbb{Z}}$ is unbounded
 
+\end{proof}
+
+\begin{theorem}\label{thm:closed_length_spectrum_is_dense}
+	Let $S$ be a surface (possibly with punctures) and $\rho: \pi_1(S) \rightarrow \pslr$ be a non-elementary and indiscrete representation. Then, the translation lengths of closed curves are dense in $[0, \infty)$.
+\end{theorem}
+\begin{proof}
+	As $\rho$ is non-elementary and discrete, there exists $T,R \in \rho(\pi_1(S))$ such that $T$ is hyperbolic and $R$ is infinite order elliptic \cite[Chapter 2]{SK}. We can conjugate $R$ such that it is of the form $\begin{bmatrix}
+		\cos{\theta} & \sin{\theta} \\
+		-\sin{\theta} & \cos{\theta} \\ 
+	\end{bmatrix}$, where $\theta = 2 \pi \alpha, \alpha \in [0,1] \setminus \mathbb{Q} $. 
+	
+	\noindent Let $T= \begin{bmatrix}
+		a & b \\
+		c & d \\ 
+	\end{bmatrix}$. Note that $TR= \begin{bmatrix}
+		a \cos{\theta} - b \sin{\theta} & a \sin{\theta} + b \cos{\theta} \\
+		c \cos{\theta} - d \sin{\theta} & c \sin{\theta} + d \cos{\theta} \\ 
+	\end{bmatrix}$. 
+	
+	\noindent Now, consider the element $TRT^{-1}R^{-1}$, then by ~\ref{prop:traceformula},
+	\begin{align*}
+		\tra(TRT^{-1}R^{-1}) &=
+		(a+d)^2 + 4\cos^2{\theta} + ((a+d)\cos{\theta} + (c-b) \sin{\theta})^2 \\ & \quad - 2(a+d)\cos{\theta}((a+d)\cos{\theta} + (c-b) \sin{\theta}) - 2 \\
+		&= (a+d)^2 + 4\cos^2{\theta} - (a+d)^2 \cos^2{\theta} + (b-c)^2 \sin^2{\theta} - 2 \\
+		&= ((a+d)^2 + (b-c)^2) \sin^{2}{\theta} + 4 \cos^2{\theta} - 2   \\
+		&= (a^2+b^2+c^2+d^2) \sin^2{\theta} + 2 \cos^2{\theta} \\
+		&= 2 + (\norm{T}^2 - 2) \sin^2{\theta}
+	\end{align*}
+	By ~\ref{lem:norm}, it follows that $\tra(TRT^{-1}R^{-1})$ is hyperbolic. From the above discussion, we can see that,
+	$$\tra(T^mR^nT^{-m}R^{-n}) = 2 + (\norm{T^m}^2 - 2)\sin^2{n\theta}$$
+	We conclude from above that $T^mR^nT^{-m}R^{-n}$ for every $m,n$ are hyperbolic. 
+	Now, by the unboundedness of $\norm{T^n}$ and denseness of $\sin{n \theta}$ in $[0,1]$, we see that the traces of $T^mR^nT^{-m}R^{-n}$ are dense in $[0,\infty)$. This in turn implies that translation lengths are dense, because they are hyperbolic elements.
+	
+\end{proof}
